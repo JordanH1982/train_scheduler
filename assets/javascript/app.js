@@ -44,6 +44,7 @@ $("#add-train").on("click", function() {
   firstTrainTime = $("#train-time").val().trim();
   frequency = $("#frequency").val().trim();
   
+  // math help and momentJS help via a google search...
   // initial time (pushed back 1 year to make sure it comes before current time)
   var firstTimeConverted = moment(firstTrainTime, "hh:mm").subtract(1, "years");
 
@@ -94,16 +95,8 @@ $("#add-train").on("click", function() {
   database.ref().orderByChild("dateAdded").limitToLast(15).on("child_added", function(snapshot) {
 
 
-    console.log("Train name: " + snapshot.val().trainName);
-    console.log("Destination: " + snapshot.val().destination);
-    console.log("First train: " + snapshot.val().firstTrainTime);
-    console.log("Frequency: " + snapshot.val().frequency);
-    console.log("Next train: " + snapshot.val().nextArrival);
-    console.log("Minutes away: " + snapshot.val().minutesAway);
-    console.log("==============================");
 
-
-  // Change the HTML to reflect
+  // show in the html
   $("#new-train").append("<tr><td>" + snapshot.val().trainName + "</td>" +
     "<td>" + snapshot.val().destination + "</td>" + 
     "<td>" + "Every " + snapshot.val().frequency + " mins" + "</td>" + 
@@ -113,12 +106,12 @@ $("#add-train").on("click", function() {
 
   index++;
 
-  // Handle the errors
+  // handle the errors
   }, function(errorObject) {
     console.log("Errors handled: " + errorObject.code);
   });
 
-  //Gets the train IDs in an Array
+  //pushes trains to an array
   database.ref().once('value', function(dataSnapshot){ 
     var trainIndex = 0;
 
